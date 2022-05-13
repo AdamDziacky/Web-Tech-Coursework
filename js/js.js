@@ -1,20 +1,21 @@
-(function(){
+(function()
+{
     // Functions
-
-    function buildQuiz(){
+    function buildQuiz()
+    {
       // variable to store the HTML output
       const output = [];
   
       // for each question...
       myQuestions.forEach(
-        (currentQuestion, questionNumber) => {
-  
+        (currentQuestion, questionNumber) => 
+        {
           // variable to store the list of possible answers
           const answers = [];
   
           // and for each available answer...
-          for(letter in currentQuestion.answers){
-  
+          for(letter in currentQuestion.answers)
+          {
             // ...add an HTML radio button
             answers.push(
               `<label>
@@ -26,7 +27,9 @@
           }
   
           // add this question and its answers to the output
-          if (currentQuestion.att_type == "N/A") {
+          // Distinguish questions with attachments
+          if (currentQuestion.att_type == "N/A") 
+          {
             output.push(
               `<div class="slide">
                 <div class="question"> ${currentQuestion.question} </div>
@@ -36,7 +39,8 @@
             );
           }
 
-          if (currentQuestion.att_type == "Image") {
+          if (currentQuestion.att_type == "Image") 
+          {
             output.push(
               `<div class="slide">
                 <div class="question"> ${currentQuestion.question} </div>
@@ -47,7 +51,8 @@
             );
           }          
 
-          if (currentQuestion.att_type == "Audio") {
+          if (currentQuestion.att_type == "Audio") 
+          {
             output.push(
               `<div class="slide">
                 <div class="question"> ${currentQuestion.question} </div>
@@ -70,15 +75,13 @@
       quizContainer.innerHTML = output.join('');
     }
 
-    function showResults(){
+    function showResults()
+    {
 
       //close the timer and assign time points for last question
       if (timerId) 
       {     
-        // console.log("timeScoreBonus " + timeLeft);
         timeScoreBonuses[myQuestions.length] = timeLeft;
-        // console.log(timeScoreBonuses);
-
         clearInterval(timerId);
       }
 
@@ -90,7 +93,8 @@
       let scoreTotal = 0;
   
       // for each question...
-      myQuestions.forEach( (currentQuestion, questionNumber) => {
+      myQuestions.forEach( (currentQuestion, questionNumber) => 
+      {
   
         // find selected answer
         const answerContainer = answerContainers[questionNumber];
@@ -98,40 +102,35 @@
         const userAnswer = (answerContainer.querySelector(selector) || {}).value;
   
         // if answer is correct
-        if(userAnswer === currentQuestion.correctAnswer){
+        if(userAnswer === currentQuestion.correctAnswer)
+        {
           // add to the number of correct answers
           numCorrect++;
-          console.log("Score bonus for Q" + (questionNumber + 1) + "   " + timeScoreBonuses[(questionNumber + 1)]);
-
           scoreTotal += (1 + timeScoreBonuses[(questionNumber + 1)]);
           
           // color the answers green
           answerContainers[questionNumber].style.color = 'lightgreen';
         }
         // if answer is wrong or blank
-        else{
+        else
+        {
           // color the answers red
           answerContainers[questionNumber].style.color = 'red';
         }
       });
       
       // show number of correct answers out of total
-      
-      console.log("Score total: " + scoreTotal);
       resultsContainer.innerHTML = `Your score is: ${scoreTotal} out of ${myQuestions.length * 20}`;
       previousButton.style.display = "none";
       submitButton.style.display = "none";
     }
   
-    function showSlide(n) {
-
-      // If there is an interval running, stop it, reset the timeLeft var. 
-      
+    function showSlide(n) 
+    {
+      // If there is an interval (timer) running, stop it, reset the timeLeft var. 
       if (timerId) 
       {     
-        console.log("timeScoreBonus " + timeLeft);
         timeScoreBonuses[n] = timeLeft;
-        console.log(timeScoreBonuses);
 
         clearInterval(timerId);
         timeLeft = 20;
@@ -147,29 +146,37 @@
       slides[currentSlide].classList.remove('active-slide');
       slides[n].classList.add('active-slide');
       currentSlide = n;
-      if(currentSlide === 0){
+      if(currentSlide === 0)
+      {
         previousButton.style.display = 'none';
       }
-      else{
+
+      else
+      {
         previousButton.style.display = 'inline-block';
       }
-      if(currentSlide === slides.length-1){
+
+      if(currentSlide === slides.length-1)
+      {
         nextButton.style.display = 'none';
         submitButton.style.display = 'inline-block';
       }
-      else{
+
+      else
+      {
         nextButton.style.display = 'inline-block';
         submitButton.style.display = 'none';
       }
     }
   
-    function showNextSlide() {  
+    function showNextSlide() 
+    {  
       progress_list[currentSlide].style.textDecoration = "line-through";
       showSlide(currentSlide + 1);
-
     }
   
-    function showPreviousSlide() {
+    function showPreviousSlide() 
+    {
       progress_list[currentSlide - 1].style.textDecoration = "initial";
       showSlide(currentSlide - 1);
     }
@@ -188,17 +195,21 @@
       document.getElementById('continue').style.display = "inline-block";
     }
 
-    function countdown() {
-      if (timeLeft == -1) {
+    // Timer for getting bonus points
+    function countdown() 
+    {
+      if (timeLeft == -1) 
+      {
           clearTimeout(timerId);
       } 
-      else {
-          console.log(timeLeft + ' seconds remaining');
+      else 
+      {
+          console.log(timeLeft + ' seconds remaining to get fast answer bonus points.');
           timeLeft--;
       }
-  }
+    }
 
-    // after clicking continue button
+    // After clicking continue button
     function startQuiz()
     {
       showSlide(currentSlide);
@@ -209,9 +220,11 @@
       document.getElementById('welcomeDiv').style.display = 'none';
     }
   
+    
     // Variables
-
-    var timeScoreBonuses = {
+    //default time bonuses for questions
+    var timeScoreBonuses = 
+    {
       1: 0,
       2: 0,
       3: 0,
@@ -234,7 +247,8 @@
     const continueButton = document.getElementById('continue');
     var progress_list = document.getElementsByClassName("progress-ul-li");
 
-    const myQuestions = [
+    const myQuestions = 
+    [
         {
           question: "I am going to make him an offer he can't refuse. <br> In what movie did this line appear?",
           answers: {
@@ -351,9 +365,6 @@
     const slides = document.querySelectorAll(".slide");
     let currentSlide = 0;
   
-    // // Show the first slide
-    // showSlide(currentSlide);
-  
     // Event listeners
     submitButton.addEventListener('click', showResults);
     previousButton.addEventListener("click", showPreviousSlide);
@@ -361,6 +372,7 @@
     startButton.addEventListener('click', welcomeMessage);
     continueButton.addEventListener('click', startQuiz);
 
+    //Hide buttons for starters
     submitButton.style.display = 'none';
     previousButton.style.display = 'none';
     nextButton.style.display = 'none';
